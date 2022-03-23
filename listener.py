@@ -14,9 +14,13 @@ def serialReader():
 def serialWriter():
     with serial.Serial('COM9', 9600, timeout=10) as write_ser:
         #print("secret message")
-        write_ser.write("SECRETPASSWORD".encode())
-        write_ser.close()
-        print("Success")
+        while True:
+            write_ser.write("SECRETPASSWORD".encode())
+            print("Success")
+        
+        #
+
+
 
 def main(): 
     serialWriter()
