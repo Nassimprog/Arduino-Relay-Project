@@ -1,7 +1,12 @@
-import listener
+import serial
+import time
+    
+with serial.Serial('COM10', 9600, timeout=10) as ser:
+    #x = ser.read()          # read one 
+    while True: # while not found device
+        #s = ser.read(1024)        # read up to ten bytes (timeout)
+        line = ser.readline()   # read a '\n' terminated line
+        print(line)
+        time.sleep(0.01)
 
-ser = listener.Serial('COM10')  # open serial port
-print(ser.name)         # check which port was really used
-ser.write(b'hello')     # write a string
-ser.close()             # close port
 
