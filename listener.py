@@ -1,4 +1,5 @@
 import serial
+import nfc
 import time
 
 def serialReader():
@@ -18,13 +19,12 @@ def serialWriter():
             write_ser.write("SECRETPASSWORD".encode())
             print("Success")
         
-        #
 
 
 
 def main(): 
-    serialWriter()
-    #serialReader()
+    #serialWriter()
+    serialReader()
 
   
   
