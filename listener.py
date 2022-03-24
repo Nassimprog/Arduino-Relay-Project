@@ -5,9 +5,9 @@ def serialReader():
     with serial.Serial('COM10', 9600, timeout=10) as read_ser:
         #x = read_ser.read()          # read one 
         while True: # while not found device
-            #s = read_ser.read(1024)        # read up to ten bytes (timeout)
-            line = read_ser.readline()   # read a '\n' terminated line
-            print(line)
+            #s = read_ser.read(1024)   # reads data in bytes     
+            line = read_ser.readline().decode('ascii') 
+            print(line) 
             time.sleep(0.01)
         #read_ser.close()
 
