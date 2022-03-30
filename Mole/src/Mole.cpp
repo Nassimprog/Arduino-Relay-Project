@@ -1,12 +1,3 @@
-    /*
-  PN532-NFC-RFID-Module-Library
-  modified on 18 Nov 2020
-  by Amir Mohammad Shojaee @ Electropeak
-  Home
-
-  based on www.electroschematics.com Arduino Examples
-*/
-// reference arduino toolkit found from Electropeak website
 #include <SoftwareSerial.h>
 
 #include <PN532_SWHSU.h>
