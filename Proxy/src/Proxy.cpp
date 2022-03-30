@@ -1,10 +1,12 @@
-
-
+#include <Arduino.h>
 #include <SoftwareSerial.h>
-
 #include <PN532_SWHSU.h>
 
 #include <PN532.h>
+
+
+#include <emulatetag.h>
+#include <NdefMessage.h>
 
 
 
@@ -16,6 +18,9 @@ PN532 nfc( pn532swhsu );
 
 // serial event vars
 String inputString = "";         // a String to hold incoming data
+NdefMessage message;
+String uid = "0x102 0x57 0x63 0x212";
+
 
 void setup()
 {
@@ -47,9 +52,11 @@ void setup()
 
   Serial.print('.'); Serial.println((versiondata>>8) & 0xFF, DEC);
 
-  // Configure board to read RFID tags
+  // Configure board to emulate nfc tag
+    nfc.setUid;
+    nfc.init();
 
-  nfc.SAMConfig();
+
 
   Serial.println("PROXY ACTIVATED: Waiting for an ISO14443A Card ...");
 
@@ -69,9 +76,12 @@ void loop()
   {
     Serial.println("SERIAL EVENT HAS FOUND STRING");
     Serial.println(inputString);
-    
     // send (write) nfc - find function for this
-    inputString = ""; // clear the string as weve processed it
+
+    //message = NdefMessage();
+    nfc.setUid(inputString);
+    nfc.emulate();
+    inputString = ""; // clear the string as it is processed it
   }
 
 

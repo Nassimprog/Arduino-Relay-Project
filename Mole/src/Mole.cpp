@@ -32,7 +32,7 @@ void setup(void) {
 
   inputString.reserve(200); // reserve 200 bytes for the inputString
 
-  Serial.println("Hello Maker!");
+  Serial.println("MOLE ACTIVATED");
 
   nfc.begin();
 
@@ -57,7 +57,8 @@ void setup(void) {
   nfc.SAMConfig();
 
   Serial.println("Waiting for an ISO14443A Card ...");
-
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, HIGH);
 }
 
 void loop() {
@@ -92,7 +93,7 @@ void loop() {
     // Serial.println("");
 
     Serial.write(inputString.c_str());
-    delay(20000); // 20 second halt
+    delay(1000); // 20 second halt
     inputString = "";
   }
 
