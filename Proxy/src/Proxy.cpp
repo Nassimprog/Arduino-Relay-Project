@@ -6,7 +6,7 @@
 
 
 #include <emulatetag.h>
-#include <NdefMessage.h>
+#include <NdefMessage.h> // doesnt exist?
 
 
 
@@ -14,12 +14,14 @@ SoftwareSerial SWSerial( 10, 11 ); // RX, TX
 
 PN532_SWHSU pn532swhsu( SWSerial );
 
-PN532 nfc( pn532swhsu );
+PN532 nfc_read( pn532swhsu );
+
+EmulateTag nfc_write(pn532swhsu);
 
 // serial event vars
 String inputString = "";         // a String to hold incoming data
 NdefMessage message;
-String uid = "0x102 0x57 0x63 0x212";
+uint8_t uid[3]= {0x12, 0x34, 0x56 };
 
 
 void setup()
@@ -32,9 +34,9 @@ void setup()
 
   Serial.println("Hello Maker!");
 
-  nfc.begin();
+  nfc_read.begin();
 
-  uint32_t versiondata = nfc.getFirmwareVersion();
+  uint32_t versiondata = nfc_read.getFirmwareVersion();
 
   if (! versiondata) {
 
@@ -53,13 +55,16 @@ void setup()
   Serial.print('.'); Serial.println((versiondata>>8) & 0xFF, DEC);
 
   // Configure board to emulate nfc tag
-    nfc.setUid;
-    nfc.init();
+    //nfc.setUid;
+    //nfc.init();
 
 
-
-  Serial.println("PROXY ACTIVATED: Waiting for an ISO14443A Card ...");
-
+  //uint8_t uidInt = uid.toInt();
+  Serial.println("PROXY ACTIVATED");
+  Serial.println("uid: ");
+  //Serial.println(uid);
+  nfc_write.setUid(uid);
+  nfc_write.init();
 }
 
 void loop() 
@@ -77,12 +82,15 @@ void loop()
     Serial.println("SERIAL EVENT HAS FOUND STRING");
     Serial.println(inputString);
     // send (write) nfc - find function for this
+   
+    uint8_t inputStringInt = inputString.toInt();
 
-    //message = NdefMessage();
-    nfc.setUid(inputString);
-    nfc.emulate();
+    nfc_write.setUid(&inputStringInt);
+    nfc_write.init();
+    nfc_write.emulate();
     inputString = ""; // clear the string as it is processed it
   }
 
+  nfc_write.emulate();
 
 }
