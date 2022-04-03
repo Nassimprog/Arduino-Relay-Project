@@ -55,14 +55,12 @@ void setup()
   Serial.print('.'); Serial.println((versiondata>>8) & 0xFF, DEC);
 
   // Configure board to emulate nfc tag
-    //nfc.setUid;
-    //nfc.init();
-
 
   //uint8_t uidInt = uid.toInt();
   Serial.println("PROXY ACTIVATED");
   Serial.println("uid: ");
   //Serial.println(uid);
+  //TODO Make set UID, it is currently 000000000 but setting the UID does not change the value
   nfc_write.setUid(uid);
   nfc_write.init();
 }
@@ -81,16 +79,15 @@ void loop()
   {
     Serial.println("SERIAL EVENT HAS FOUND STRING");
     Serial.println(inputString);
-    // send (write) nfc - find function for this
-   
+    
+   // Convert arduino string into uint8_t
     uint8_t inputStringInt = inputString.toInt();
-
     nfc_write.setUid(&inputStringInt);
     nfc_write.init();
     nfc_write.emulate();
     inputString = ""; // clear the string as it is processed it
   }
 
-  nfc_write.emulate();
+  //nfc_write.emulate();
 
 }
