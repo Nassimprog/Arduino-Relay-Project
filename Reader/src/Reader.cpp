@@ -15,9 +15,12 @@ PN532 nfc( pn532swhsu );
 // serial event vars
 String inputString = "";         // a String to hold incoming data
 bool stringComplete = false;
+int interractionTime = 0;
 
 
 void setup(void) {
+
+  
 
   Serial.begin(9600);
 
@@ -50,6 +53,8 @@ void setup(void) {
   Serial.println("Waiting for an ISO14443A Card ...");
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);
+
+  
 }
 
 void loop() {
@@ -69,6 +74,11 @@ void loop() {
 
     Serial.println("Card Found! Sending UID CALL REQUEST");
     //start timer
+    int timerStart = millis();   //  gets time since program has run
+
+
+
+
     relay = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, &uid[0], &uidLength);
     Serial.print("UID Length: "); Serial.print(uidLength, DEC); Serial.println(" bytes");
     Serial.print("UID Value: ");
@@ -88,6 +98,15 @@ void loop() {
     Serial.write(inputString.c_str());
     delay(1000); // 20 second halt
     inputString = "";
+
+
+
+    interractionTime = (millis() - timerStart);
+    Serial.print("");
+    Serial.print("Time of interraction: ");
+    Serial.print(interractionTime);
+
+    delay(1000);
   }
 
   else 
