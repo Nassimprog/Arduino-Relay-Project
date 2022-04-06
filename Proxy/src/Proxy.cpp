@@ -67,6 +67,8 @@ void setup()
 
 void loop() 
 {
+
+  //recieves 
   while (Serial.available() > 0 )
   {
     inputString = Serial.read(); // returns SINGLE byte (char)
@@ -74,19 +76,34 @@ void loop()
   //delay(20000);
     
 
-// print the string when a newline arrives: (serialEvent)
-  if (inputString.endsWith("\n")) // where arg is arduino string
+  // when proxy recieves request (serialEvent)
+  if (inputString.equals("UID Request")) // where arg is arduino string
   {
     Serial.println("SERIAL EVENT HAS FOUND STRING");
     Serial.println(inputString);
+
+    // send request to mole to read card
+    inputString = "GET_UID" ;
+    Serial.write(inputString.c_str());
+
+
+  
+  }
+
+  if (inputString.equals("INSERT_UID_HEREHARDCODE")) // where arg is arduino string
+  {
+     // Convert arduino string into uint8_t
+
+    Serial.println("SERIAL EVENT HAS FOUND STRING");
+    Serial.println(inputString.c_str());
     
-   // Convert arduino string into uint8_t
     uint8_t inputStringInt = inputString.toInt();
     nfc_write.setUid(&inputStringInt);
     nfc_write.init();
     nfc_write.emulate();
-    inputString = ""; // clear the string as it is processed it
+    //inputString = ""; // clear the string as it is processed it
   }
+
 
   //nfc_write.emulate();
 

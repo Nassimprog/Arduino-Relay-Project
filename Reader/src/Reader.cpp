@@ -74,39 +74,53 @@ void loop() {
 
     Serial.println("Card Found! Sending UID CALL REQUEST");
     //start timer
-    int timerStart = millis();   //  gets time since program has run
+    // int timerStart = millis();   //  gets time since program has run
+    // // Serial Write request for UID
+    // inputString = "UID Request";
+    // Serial.write(inputString.c_str());
 
 
-
-
-    relay = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, &uid[0], &uidLength);
-    Serial.print("UID Length: "); Serial.print(uidLength, DEC); Serial.println(" bytes");
-    Serial.print("UID Value: ");
-
-    for(uint8_t i = 0 ; i < uidLength ; ++i)
+    // Read data recieved
+    success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, &uid[0], &uidLength);
+    if(success)
+    {
+      // read uid
+      for(uint8_t i = 0 ; i < uidLength ; ++i)
     {
       // Serial.print(" 0x");
       // Serial.print(uid[i], HEX); // in hex
     
       inputString += " 0x";
       inputString += uid[i];
+
+      Serial.print("UID Length: "); Serial.print(uidLength, DEC); Serial.println(" bytes");
+      Serial.print("UID Value: ");
+      Serial.write(inputString.c_str());
+      
     }
-    inputString += '\n';
-    // Serial.print(inputString);
-    // Serial.println("");
-
-    Serial.write(inputString.c_str());
-    delay(1000); // 20 second halt
-    inputString = "";
+    }
 
 
+    //   while (Serial.available() > 0 )
+    // {
+    //   inputString = Serial.read(); // returns SINGLE byte (char)
+    // }
+    
+    if(inputString == "HARD_CODED_UID_VALUE") // if Input string matches value, then it passes the checks
+    {
+      Serial.print("Pass");
 
-    interractionTime = (millis() - timerStart);
-    Serial.print("");
-    Serial.print("Time of interraction: ");
-    Serial.print(interractionTime);
+      // interractionTime = (millis() - timerStart);
+      // Serial.print("");
+      // Serial.print("Time of interraction: ");
+      // Serial.print(interractionTime);
+      inputString = "";
+    }
+    
 
-    delay(1000);
+    delay(10000);
+
+    //while(1) // halt
   }
 
   else 
