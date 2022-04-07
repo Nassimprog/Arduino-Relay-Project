@@ -4,15 +4,15 @@ import threading
 
 import logging
 
-# COM9 is right side
-# COM10 is left side open space
+# COM9 is left side
+# COM10 is right side
 
 
 class SerialRelay:
     def __init__(self):
-        self.mole = serial.Serial('COM9', 9600, timeout=10)        
-        self.reader = serial.Serial('COM9', 9600, timeout=10)
-        self.proxy = serial.Serial('COM10', 9600, timeout=10)
+        self.mole = serial.Serial('COM11', 9600, timeout=10)        
+        #self.reader = serial.Serial('COM9', 9600, timeout=10)
+        self.proxy = serial.Serial('COM9', 9600, timeout=10)
         self.running = True
         self.log = logging.getLogger(__name__)
 
@@ -26,7 +26,7 @@ class SerialRelay:
             line = self.reader.readline() 
             self.log.debug("READER: %s", line) 
             time.sleep(0.01)
-#            self.proxy.write(line)
+           # self.proxy.write(line)
 
     def runMole(self):
         """

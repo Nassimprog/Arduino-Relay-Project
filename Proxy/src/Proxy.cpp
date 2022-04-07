@@ -22,6 +22,7 @@ EmulateTag nfc_write(pn532swhsu);
 String inputString = "";         // a String to hold incoming data
 NdefMessage message;
 uint8_t uid[3]= {0x12, 0x34, 0x56 };
+int step = 0;
 
 
 void setup()
@@ -58,8 +59,7 @@ void setup()
 
   //uint8_t uidInt = uid.toInt();
   Serial.println("PROXY ACTIVATED");
-  Serial.println("uid: ");
-  //Serial.println(uid);
+  
   //TODO Make set UID, it is currently 000000000 but setting the UID does not change the value
   nfc_write.setUid(uid);
   nfc_write.init();
@@ -68,43 +68,47 @@ void setup()
 void loop() 
 {
 
-  //recieves 
-  while (Serial.available() > 0 )
+  if(step == 0)
   {
-    inputString = Serial.read(); // returns SINGLE byte (char)
-  }
-  //delay(20000);
-    
-
-  // when proxy recieves request (serialEvent)
-  if (inputString.equals("UID Request")) // where arg is arduino string
-  {
-    Serial.println("SERIAL EVENT HAS FOUND STRING");
-    Serial.println(inputString);
-
-    // send request to mole to read card
     inputString = "GET_UID" ;
     Serial.write(inputString.c_str());
+    //delay(1000);
 
-
-  
+    //recieves 
+    while (Serial.available() > 0 )
+    {
+      inputString = Serial.read(); // returns SINGLE byte (char)
+    }
   }
+
+  // when proxy recieves request (serialEvent)
+  // if (inputString.equals("UID")) // where arg is arduino string
+  // {
+  //   Serial.println("SERIAL EVENT HAS FOUND STRING");
+  //   Serial.println(inputString);
+
+  //   // send request to mole to read card
+  //   inputString = "GET_UID" ;
+  //   Serial.write(inputString.c_str());
+  //   step += 1;
+  // }
 
   if (inputString.equals("INSERT_UID_HEREHARDCODE")) // where arg is arduino string
   {
+    step = 1;
      // Convert arduino string into uint8_t
 
-    Serial.println("SERIAL EVENT HAS FOUND STRING");
+    Serial.println("PROXY HAS FOUND UID: ");
     Serial.println(inputString.c_str());
     
     uint8_t inputStringInt = inputString.toInt();
     nfc_write.setUid(&inputStringInt);
     nfc_write.init();
     nfc_write.emulate();
-    //inputString = ""; // clear the string as it is processed it
+    
   }
 
 
-  //nfc_write.emulate();
+  
 
 }

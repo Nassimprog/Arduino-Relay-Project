@@ -47,7 +47,7 @@ void setup(void) {
 
   nfc.SAMConfig();
 
-  Serial.println("Waiting for an ISO14443A Card ...");
+  
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);
 }
@@ -61,16 +61,19 @@ void loop() {
   uint8_t uidLength;                       // Length of the UID (4 or 7 bytes depending on ISO14443A card type)
 
   // when mole recieves request from proxy
-  
+  Serial.println("Listening ...");
+
   while (Serial.available() > 0 )
   {
     inputString = Serial.read(); // returns SINGLE byte (char)
   }
 
-  success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, &uid[0], &uidLength);
 
   if (inputString.equals("GET_UID")) // where arg is arduino string
   {
+      Serial.println("Request Found");
+      Serial.println("Waiting for an ISO14443A Card ...");
+      success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, &uid[0], &uidLength);
       if(success)
     {
 
@@ -104,39 +107,6 @@ void loop() {
       Serial.println("Timed out! Waiting for a card...");
     }
   }
-
-  // moved into serial read statement
-  success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, &uid[0], &uidLength);
-  // if(success)
-  // {
-
-  //   Serial.println("Found A Card!");
-
-  //   Serial.print("UID Length: "); Serial.print(uidLength, DEC); Serial.println(" bytes");
-  //   Serial.print("UID Value: ");
-
-  //   for(uint8_t i = 0 ; i < uidLength ; ++i)
-  //   {
-  //     // Serial.print(" 0x");
-  //     // Serial.print(uid[i], HEX); // in hex
-    
-  //     inputString += " 0x";
-  //     inputString += uid[i];
-  //   }
-  //   inputString += '\n';
-  //   // Serial.print(inputString);
-  //   // Serial.println("");
-
-  //   Serial.write(inputString.c_str());
-  //   delay(1000); // 20 second halt
-  //   inputString = "";
-  // }
-
-  // else 
-  // {
-  //   // PN532 timed out
-  //   Serial.println("Timed out! Waiting for a card...");
-  //  }
 }
 
 

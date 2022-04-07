@@ -74,16 +74,15 @@ void loop() {
 
     Serial.println("Card Found! Sending UID CALL REQUEST");
     //start timer
-    // int timerStart = millis();   //  gets time since program has run
+    int timerStart = millis();   //  gets time since program has run
     // // Serial Write request for UID
     // inputString = "UID Request";
     // Serial.write(inputString.c_str());
 
 
     // Read data recieved
-    success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, &uid[0], &uidLength);
-    if(success)
-    {
+    
+    
       // read uid
       for(uint8_t i = 0 ; i < uidLength ; ++i)
     {
@@ -98,13 +97,9 @@ void loop() {
       Serial.write(inputString.c_str());
       
     }
-    }
+    
 
 
-    //   while (Serial.available() > 0 )
-    // {
-    //   inputString = Serial.read(); // returns SINGLE byte (char)
-    // }
     
     if(inputString == "HARD_CODED_UID_VALUE") // if Input string matches value, then it passes the checks
     {
