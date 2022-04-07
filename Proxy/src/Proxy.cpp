@@ -73,25 +73,13 @@ void loop()
     inputString = "GET_UID" ;
     Serial.write(inputString.c_str());
     //delay(1000);
-
-    //recieves 
-    while (Serial.available() > 0 )
-    {
-      inputString = Serial.read(); // returns SINGLE byte (char)
-    }
   }
 
-  // when proxy recieves request (serialEvent)
-  // if (inputString.equals("UID")) // where arg is arduino string
-  // {
-  //   Serial.println("SERIAL EVENT HAS FOUND STRING");
-  //   Serial.println(inputString);
-
-  //   // send request to mole to read card
-  //   inputString = "GET_UID" ;
-  //   Serial.write(inputString.c_str());
-  //   step += 1;
-  // }
+  //recieves 
+  while (Serial.available() > 0 )
+  {
+    inputString = Serial.read(); // returns SINGLE byte (char)
+  }
 
   if (inputString.equals("INSERT_UID_HEREHARDCODE")) // where arg is arduino string
   {

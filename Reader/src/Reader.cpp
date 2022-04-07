@@ -101,7 +101,7 @@ void loop() {
 
 
     
-    if(inputString == "HARD_CODED_UID_VALUE") // if Input string matches value, then it passes the checks
+    if(inputString == " 0x102 0x57 0x63 0x212Tim") // if Input string matches value, then it passes the checks
     {
       Serial.print("Pass");
 
@@ -109,9 +109,9 @@ void loop() {
       // Serial.print("");
       // Serial.print("Time of interraction: ");
       // Serial.print(interractionTime);
-      inputString = "";
+      
     }
-    
+    inputString = "";
 
     delay(10000);
 
