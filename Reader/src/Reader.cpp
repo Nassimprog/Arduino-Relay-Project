@@ -60,7 +60,6 @@ void setup(void) {
 void loop() {
 
   boolean success;
-  boolean relay;
 
   uint8_t uid[] = { 0, 0, 0, 0, 0, 0, 0 };  // Buffer to store the returned UID
 
@@ -72,12 +71,10 @@ void loop() {
   if(success)
   {
 
-    Serial.println("Card Found! Sending UID CALL REQUEST");
+    Serial.println("Card Found!");
     //start timer
     int timerStart = millis();   //  gets time since program has run
-    // // Serial Write request for UID
-    // inputString = "UID Request";
-    // Serial.write(inputString.c_str());
+    
 
 
     // Read data recieved
@@ -85,44 +82,34 @@ void loop() {
     
       // read uid
       for(uint8_t i = 0 ; i < uidLength ; ++i)
-    {
-      // Serial.print(" 0x");
-      // Serial.print(uid[i], HEX); // in hex
-    
-      inputString += " 0x";
-      inputString += uid[i];
+      {
+        inputString += uid[i];
+      }
 
       Serial.print("UID Length: "); Serial.print(uidLength, DEC); Serial.println(" bytes");
       Serial.print("UID Value: ");
-      Serial.write(inputString.c_str());
-      
-    }
-    
+      Serial.println(inputString.c_str());
 
-
-    
-    if(inputString == " 0x102 0x57 0x63 0x212Tim") // if Input string matches value, then it passes the checks
+    //blue tag 233209753
+    if(inputString == "233209753") // if Input string matches value, then it passes the checks
     {
       Serial.print("Pass");
 
-      // interractionTime = (millis() - timerStart);
-      // Serial.print("");
-      // Serial.print("Time of interraction: ");
-      // Serial.print(interractionTime);
+      interractionTime = (millis() - timerStart);
+      Serial.print("\n");
+      Serial.print("Time of interraction: ");
+      Serial.print(interractionTime);
       
     }
     inputString = "";
-
-    delay(10000);
-
-    //while(1) // halt
+    while(1); // halt
   }
 
   else 
   {
     // PN532 timed out
     Serial.println("Timed out! Waiting for a card...");
-   }
+  }
 }
 
 

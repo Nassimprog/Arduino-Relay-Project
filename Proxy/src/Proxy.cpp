@@ -29,6 +29,7 @@ void setup()
 {
 
   Serial.begin(9600);
+  //LocalLink.begin(9600);
 
 // reserve 200 bytes for the inputString:
   inputString.reserve(200);
@@ -39,7 +40,8 @@ void setup()
 
   uint32_t versiondata = nfc_read.getFirmwareVersion();
 
-  if (! versiondata) {
+  if (! versiondata) 
+  {
 
     Serial.print("Didn't Find PN53x Module");
 
@@ -55,6 +57,9 @@ void setup()
 
   Serial.print('.'); Serial.println((versiondata>>8) & 0xFF, DEC);
 
+
+
+
   // Configure board to emulate nfc tag
 
   //uint8_t uidInt = uid.toInt();
@@ -68,35 +73,46 @@ void setup()
 void loop() 
 {
 
-  if(step == 0)
+  
+  //Serial.println("DBG:  Running Loop");
+  //Serial.println("MSG Message to Mole");
+  //Serial.println("DBG:  Done");
+  //delay(5000);
+if(step == 0)
+{
+  Serial.println("MSG Message to Mole"); 
+  Serial.println("Proxy is Listening ...");
+  step = 1;
+}
+  
+
+  if(step == 1)
   {
-    inputString = "GET_UID" ;
-    Serial.write(inputString.c_str());
-    //delay(1000);
+    if(Serial.available())
+    {
+      Serial.println("Response found!");
+      inputString = Serial.readString();
+      step = 2;
+    }
   }
+  
+  
 
-  //recieves 
-  while (Serial.available() > 0 )
+  
+  // Emulates as an NFC TAG with relayed UID Value
+  if (step == 2) 
   {
-    inputString = Serial.read(); // returns SINGLE byte (char)
-  }
-
-  if (inputString.equals("INSERT_UID_HEREHARDCODE")) // where arg is arduino string
-  {
-    step = 1;
-     // Convert arduino string into uint8_t
-
-    Serial.println("PROXY HAS FOUND UID: ");
-    Serial.println(inputString.c_str());
+    //Remove "MSG " prefix
     
+    inputString.remove(0);
+    inputString.remove(0);
+    inputString.remove(0);
+    // Convert arduino string into uint8_t
     uint8_t inputStringInt = inputString.toInt();
+    Serial.println(inputStringInt);
     nfc_write.setUid(&inputStringInt);
     nfc_write.init();
     nfc_write.emulate();
-    
   }
-
-
-  
 
 }

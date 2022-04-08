@@ -4,15 +4,16 @@ import threading
 
 import logging
 
-# COM9 is left side
-# COM10 is right side
+# COM9 is Proxy
+# COM10 is Reader
+# COM11 is Mole
 
 
 class SerialRelay:
     def __init__(self):
         self.mole = serial.Serial('COM11', 9600, timeout=10)        
-        #self.reader = serial.Serial('COM9', 9600, timeout=10)
         self.proxy = serial.Serial('COM9', 9600, timeout=10)
+        #self.reader = serial.Serial('COM10', 9600, timeout=10)
         self.running = True
         self.log = logging.getLogger(__name__)
 
@@ -37,18 +38,21 @@ class SerialRelay:
         while self.running:
             data = self.mole.readline()
             self.log.debug("MOLE: %s", data) 
-            self.proxy.writelines(data)
+            if b"MSG" in data:
+                self.proxy.write(data)
 
     def runProxy(self):
         """
         Does whatever the Proxy doesdata
         """
+        
         self.log.info("Starting PRoxy")
         while self.running:
-            print("Run Reader")
+            #print("Run Reader")
             data = self.proxy.readline()
             self.log.debug("PROXY: %s", data)
-            self.mole.writelines(data)
+            if b"MSG" in data:
+                self.mole.write(data)
 
 
     def run(self):
