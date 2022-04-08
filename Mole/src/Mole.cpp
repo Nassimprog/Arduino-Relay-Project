@@ -71,26 +71,13 @@ void loop() {
     step = 1;
   }
   
-
-  // if (Serial.available())
-  // {
-  //   Serial.println("Data Recieved");
-  //   inputString = Serial.readString();
-  //   Serial.print("Data Was ");
-  //   Serial.println(inputString);
-  // }
-  // delay(5000);
-  
-  
   // When request is recieved, 1st step
   if(step == 1)
   {
     if (Serial.available())
     {
       Serial.println("Request Found");
-      // inputString = Serial.readString();
-      // Serial.print("Data Was ");
-      // Serial.println(inputString);
+      
 
       // Read NFC TAG
       Serial.println("Waiting for an ISO14443A Card ...");
@@ -111,17 +98,13 @@ void loop() {
           //inputString += " 0x";
           inputString += uid[i];
         }
-        //inputString += '\n';
-        // Serial.print(inputString);
-        // Serial.println("");
+        
 
 
         // should serial write UID
         //Serial.write(inputString.c_str());
-        Serial.println(inputString); // Hopefully this works it contains MSG prefix
+        Serial.println(inputString); // this sends as it contains MSG prefix
         while(1); //halt
-        //delay(1000); 
-        //inputString = "";
         
       }
 
