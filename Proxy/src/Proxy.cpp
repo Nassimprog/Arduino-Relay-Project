@@ -21,8 +21,9 @@ EmulateTag nfc_write(pn532swhsu);
 // serial event vars
 String inputString = "";         // a String to hold incoming data
 NdefMessage message;
-uint8_t uid[3]= {0x12, 0x34, 0x56 };
+uint8_t uid[] = { 0, 0, 0, 0, 0, 0, 0 };
 int step = 0;
+int interractionTime = 0;
 
 
 void setup()
@@ -72,7 +73,7 @@ void setup()
 
 void loop() 
 {
-
+  int timerStart = millis();
   
   //Serial.println("DBG:  Running Loop");
   //Serial.println("MSG Message to Mole");
@@ -80,6 +81,7 @@ void loop()
   //delay(5000);
 if(step == 0)
 {
+  
   Serial.println("MSG Message to Mole"); 
   Serial.println("Proxy is Listening ...");
   step = 1;
@@ -102,17 +104,37 @@ if(step == 0)
   // Emulates as an NFC TAG with relayed UID Value
   if (step == 2) 
   {
-    //Remove "MSG " prefix
+    //Remove "MSG" prefix
     
+    
+    Serial.println(inputString);
     inputString.remove(0);
     inputString.remove(0);
     inputString.remove(0);
     // Convert arduino string into uint8_t
-    uint8_t inputStringInt = inputString.toInt();
-    Serial.println(inputStringInt);
-    nfc_write.setUid(&inputStringInt);
+
+    //8124793
+    //uint8_t inputStringInt = inputString.toInt();
+    uint8_t uid[3] = { 0x7B, 0xF9, 0x79 };
+    // uid[0] = (uint8_t)(inputStringInt >> 24);
+    // uid[1] = (uint8_t)(inputStringInt >> 16);
+    // uid[2] = (uint8_t)(inputStringInt >> 8);
+    //uid[3] = (uint8_t)inputStringInt;
+    
+    
+    
+    // uint8_t inputStringInt = 8124793;
+    // //uint8_t* ptr = &inputStringInt;
+    // uint8_t* ptr = reinterpret_cast<uint8_t*>(8124793);
+    // Serial.println(*ptr);
+    nfc_write.setUid(uid); // 80097 is memory address, it should be 8124793 value initialise a pointer and set the value of the pointer to the UID Value.   
+    interractionTime = (millis() - timerStart);
+    Serial.println("Time of interraction: ");
+    Serial.println(interractionTime);
     nfc_write.init();
     nfc_write.emulate();
+
+    
   }
 
 }

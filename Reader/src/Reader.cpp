@@ -70,16 +70,12 @@ void loop() {
   // When a card is detected: request UID
   if(success)
   {
-
-    Serial.println("Card Found!");
     //start timer
-    int timerStart = millis();   //  gets time since program has run
-    
-
+    int timerStart = millis(); //  gets time since program has run
+    delay(2000);
+    Serial.println("Card Found!");
 
     // Read data recieved
-    
-    
       // read uid
       for(uint8_t i = 0 ; i < uidLength ; ++i)
       {
@@ -90,8 +86,8 @@ void loop() {
       Serial.print("UID Value: ");
       Serial.println(inputString.c_str());
 
-    //blue tag 233209753
-    if(inputString == "233209753") // if Input string matches value, then it passes the checks
+    //blue tag 8124793
+    if(inputString == "8123249121" || inputString == "8124793") // if Input string matches value, then it passes the checks
     {
       Serial.print("Pass");
 

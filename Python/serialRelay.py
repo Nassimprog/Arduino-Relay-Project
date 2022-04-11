@@ -46,7 +46,7 @@ class SerialRelay:
         Does whatever the Proxy doesdata
         """
         
-        self.log.info("Starting PRoxy")
+        self.log.info("Starting Proxy")
         while self.running:
             #print("Run Reader")
             data = self.proxy.readline()
